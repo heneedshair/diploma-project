@@ -1,0 +1,387 @@
+/* Basic Reset & Global Styles */
+body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Matching Last.fm font stack */
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: #f8f8f8; /* Light grey background */
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: #005580; /* Default link color */
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+h1, h2, h3, p {
+    margin-top: 0;
+    margin-bottom: 0.5em; /* Consistent spacing */
+}
+
+/* App Container for potential max-width and centering */
+.app-container {
+    max-width: 1200px; /* Adjust as per design, typical for centered layouts */
+    margin: 0 auto;
+    background-color: #fff; /* Main content area background */
+    /* box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional shadow for container */
+}
+
+
+/* Site Header */
+.site-header {
+    background-color: #d51007; /* Last.fm red */
+    color: #fff;
+    padding: 0 20px; /* Horizontal padding */
+}
+
+.header-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 60px; /* Adjust as needed */
+}
+
+.header-main__left {
+    flex-shrink: 0;
+}
+
+.logo__img {
+    height: 30px; /* Adjust logo size */
+    width: auto;
+    vertical-align: middle;
+}
+
+/* .logo__text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+} */
+
+.header-main__center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; /* Center search bar if nav is separate */
+    padding: 0 20px; /* Spacing around search bar */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 400px; /* Max width for search bar */
+}
+
+.search-bar__input {
+    flex-grow: 1;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 4px 0 0 4px;
+    color: #333;
+    background-color: #fff; /* White background for input */
+}
+
+.search-bar__input:focus {
+    outline: none;
+}
+
+.search-bar__button {
+    background-color: #eee; /* Light grey for button background */
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    color: #333; /* Icon color */
+}
+
+.search-bar__button:hover {
+    background-color: #ddd;
+}
+
+.main-nav {
+    margin-left: 20px; /* Space between search and nav */
+}
+
+.main-nav__list {
+    display: flex;
+}
+
+.main-nav__item {
+    margin-left: 15px; /* Spacing between nav items */
+}
+
+.main-nav__link {
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 5px;
+    display: block;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.main-nav__link:hover {
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+.main-nav__link--active {
+    border-bottom: 2px solid #fff; /* Active indicator */
+}
+
+.header-main__right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.user-profile__img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #fff; /* Optional border */
+}
+
+/* Main Content */
+.main-content {
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: normal; /* As per screenshot */
+}
+
+.content-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+/* Artist Grid */
+.artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); /* Responsive grid */
+    gap: 20px;
+}
+
+.artist-card {
+    text-align: center;
+}
+
+.artist-card__image {
+    width: 130px; /* Fixed width for consistency */
+    height: 130px; /* Fixed height for consistency */
+    border-radius: 50%; /* Circular images */
+    object-fit: cover; /* Ensure image covers the area */
+    margin: 0 auto 10px auto;
+    border: 1px solid #eee; /* Subtle border */
+}
+
+.artist-card__name {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Track Grid (for Popular Tracks) */
+.track-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive 3-column like layout */
+    gap: 20px;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff; /* White background for items */
+    padding: 10px;
+    border: 1px solid #e9e9e9; /* Border like in screenshot */
+    border-radius: 3px;
+}
+
+.track-item__album-art {
+    width: 50px; /* Smaller album art */
+    height: 50px;
+    margin-right: 15px;
+    object-fit: cover;
+    border: 1px solid #eee;
+    flex-shrink: 0;
+}
+
+.track-item__info {
+    flex-grow: 1;
+    overflow: hidden; /* Prevent text overflow issues */
+}
+
+.track-item__title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+}
+
+.track-item__artist {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Site Footer */
+.site-footer {
+    background-color: #333; /* Dark footer background */
+    color: #ccc;
+    padding: 30px 20px 10px 20px; /* More padding for footer */
+    font-size: 12px;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+    gap: 20px; /* Gap between columns */
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.footer-column {
+    flex: 1; /* Allow columns to grow and shrink */
+    min-width: 150px; /* Minimum width for columns */
+}
+
+.footer-column__title {
+    font-size: 11px;
+    color: #fff;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.footer-column__list {
+    /* Styling for list items already handled by global ul reset */
+}
+
+.footer-column__link {
+    color: #aaa;
+    display: block;
+    padding: 3px 0;
+    font-size: 12px;
+}
+
+.footer-column__link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Wrap for smaller screens */
+    padding-top: 10px;
+    font-size: 11px;
+    color: #888;
+}
+
+.footer-bottom__left {
+    margin-bottom: 10px; /* Space if it wraps */
+}
+
+.language-label {
+    color: #fff;
+    margin-right: 5px;
+}
+
+.language-link {
+    color: #aaa;
+    margin-right: 8px;
+}
+.language-link:hover {
+    color: #fff;
+}
+
+
+.footer-bottom__right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Allow items to wrap */
+}
+
+.time-info {
+    margin-right: 15px;
+    color: #888;
+}
+.time-zone-value {
+    color: #aaa;
+}
+
+
+.footer-logo {
+    height: 16px; /* Adjust as needed */
+    margin-left: 15px;
+    opacity: 0.7;
+}
+.copyright {
+    margin-left: 15px;
+    color: #888;
+}
+
+
+/* Responsive adjustments for 1024px if needed */
+/* The current grid setup (auto-fill, minmax) should handle this well. */
+/* We can add specific media queries if elements misbehave at 1024x768. */
+
+/* Example of how to ensure no overlap at 1024px specifically, though Flexbox/Grid should help prevent this.
+@media (max-width: 1024px) {
+    .header-main {
+        flex-direction: column; // Example: stack header items if too crowded
+        align-items: flex-start;
+    }
+    .main-nav {
+        margin-top: 10px;
+        width: 100%;
+    }
+    .main-nav__list {
+        justify-content: space-around;
+    }
+    .header-main__center {
+        width: 100%;
+        padding: 10px 0;
+    }
+    .search-bar {
+        max-width: none;
+    }
+}
+*/

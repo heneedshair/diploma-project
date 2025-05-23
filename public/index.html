@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -18,12 +16,341 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+  <title>Almost Last.fm</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root">
+    <div class="app-container">
+      <header class="site-header">
+        <div class="header-top-bar">
+        </div>
+        <div class="header-main">
+          <div class="header-main__left">
+            <a href="#" class="logo">
+              <img src="https://s.prcdn.co/image/2021/5/18/lastfm_1.png" alt="Last.fm Logo" class="logo__img">
+            </a>
+          </div>
+          <div class="header-main__center">
+            <div class="search-bar">
+              <input type="text" class="search-bar__input" placeholder="Search...">
+              <button class="search-bar__button">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <nav class="main-nav">
+            <ul class="main-nav__list">
+              <li class="main-nav__item"><a href="#" class="main-nav__link">Home</a></li>
+              <li class="main-nav__item"><a href="#" class="main-nav__link">Live</a></li>
+              <li class="main-nav__item"><a href="#" class="main-nav__link main-nav__link--active">Music</a></li>
+              <li class="main-nav__item"><a href="#" class="main-nav__link">Charts</a></li>
+              <li class="main-nav__item"><a href="#" class="main-nav__link">Events</a></li>
+              <li class="main-nav__item"><a href="#" class="main-nav__link">Features</a></li>
+            </ul>
+          </nav>
+          <div class="header-main__right">
+            <div class="user-profile">
+              <img src="https://via.placeholder.com/32" alt="User Profile" class="user-profile__img">
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <h1 class="page-title">Music</h1>
+
+        <section class="content-section hot-artists">
+          <h2 class="section-title">Hot right now</h2>
+          <div class="artist-grid">
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Kanye+West" alt="Kanye West"
+                class="artist-card__image">
+              <p class="artist-card__name">Kanye West</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=J-hope" alt="J-hope"
+                class="artist-card__image">
+              <p class="artist-card__name">J-hope</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=The+Weeknd" alt="The Weeknd"
+                class="artist-card__image">
+              <p class="artist-card__name">The Weeknd</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Tyler,+Creator" alt="Tyler, The Creator"
+                class="artist-card__image">
+              <p class="artist-card__name">Tyler, The Creator</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Drake" alt="Drake"
+                class="artist-card__image">
+              <p class="artist-card__name">Drake</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Steve+Lacy" alt="Steve Lacy"
+                class="artist-card__image">
+              <p class="artist-card__name">Steve Lacy</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Playboi+Carti" alt="Playboi Carti"
+                class="artist-card__image">
+              <p class="artist-card__name">Playboi Carti</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Kendrick" alt="Kendrick Lamar"
+                class="artist-card__image">
+              <p class="artist-card__name">Kendrick Lamar</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Joji" alt="Joji" class="artist-card__image">
+              <p class="artist-card__name">Joji</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Lana+Del+Rey" alt="Lana Del Rey"
+                class="artist-card__image">
+              <p class="artist-card__name">Lana Del Rey</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Mitski" alt="Mitski"
+                class="artist-card__image">
+              <p class="artist-card__name">Mitski</p>
+            </div>
+            <div class="artist-card">
+              <img src="https://via.placeholder.com/130/DDDDDD/808080?text=Frank+Ocean" alt="Frank Ocean"
+                class="artist-card__image">
+              <p class="artist-card__name">Frank Ocean</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section popular-tracks">
+          <h2 class="section-title">Popular tracks</h2>
+          <div class="track-grid">
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="SEXY NUKIM"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">SEXY NUKIM (feat. RM of BTS)</p>
+                <p class="track-item__artist">Balming Tiger</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="After LIKE"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">After LIKE</p>
+                <p class="track-item__artist">IVE</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Romantic Homicide"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Romantic Homicide</p>
+                <p class="track-item__artist">d4vd</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="HOME" class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">HOME</p>
+                <p class="track-item__artist">J-hope</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Talk That Talk"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Talk That Talk</p>
+                <p class="track-item__artist">TWICE</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Super Freaky Girl"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Super Freaky Girl</p>
+                <p class="track-item__artist">Nicki Minaj</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Yet To Come"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Yet To Come</p>
+                <p class="track-item__artist">BTS</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Hype Boy"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Hype Boy</p>
+                <p class="track-item__artist">NewJeans</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="With You"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">With You</p>
+                <p class="track-item__artist">Jimin</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Bad Decisions"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Bad Decisions (with BTS & Snoop Dogg)</p>
+                <p class="track-item__artist">Benny Blanco</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Bad Habit"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Bad Habit</p>
+                <p class="track-item__artist">Steve Lacy</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="That That"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">That That (prod. & feat. SUGA of BTS)</p>
+                <p class="track-item__artist">Psy</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Left and Right"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Left and Right (feat. Jung Kook of BTS)</p>
+                <p class="track-item__artist">Charlie Puth</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Talk" class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Talk</p>
+                <p class="track-item__artist">Yeat</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Glimpse of Us"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Glimpse of Us</p>
+                <p class="track-item__artist">Joji</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Pink Venom"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Pink Venom</p>
+                <p class="track-item__artist">BLACKPINK</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="Stay Alive"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">Stay Alive (Prod. SUGA of BTS)</p>
+                <p class="track-item__artist">Jung Kook</p>
+              </div>
+            </div>
+            <div class="track-item">
+              <img src="https://via.placeholder.com/64/EEEEEE/808080?text=Art" alt="YOURS"
+                class="track-item__album-art">
+              <div class="track-item__info">
+                <p class="track-item__title">YOURS</p>
+                <p class="track-item__artist">JIN</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-main">
+          <div class="footer-column">
+            <h3 class="footer-column__title">COMPANY</h3>
+            <ul class="footer-column__list">
+              <li><a href="#" class="footer-column__link">About Last.fm</a></li>
+              <li><a href="#" class="footer-column__link">Contact Us</a></li>
+              <li><a href="#" class="footer-column__link">Jobs</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3 class="footer-column__title">HELP</h3>
+            <ul class="footer-column__list">
+              <li><a href="#" class="footer-column__link">Track My Music</a></li>
+              <li><a href="#" class="footer-column__link">Community Support</a></li>
+              <li><a href="#" class="footer-column__link">Community Guidelines</a></li>
+              <li><a href="#" class="footer-column__link">Help</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3 class="footer-column__title">GOODIES</h3>
+            <ul class="footer-column__list">
+              <li><a href="#" class="footer-column__link">Download Scrobbler</a></li>
+              <li><a href="#" class="footer-column__link">Developer API</a></li>
+              <li><a href="#" class="footer-column__link">Free Music Downloads</a></li>
+              <li><a href="#" class="footer-column__link">Merchandise</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3 class="footer-column__title">ACCOUNT</h3>
+            <ul class="footer-column__list">
+              <li><a href="#" class="footer-column__link">Join</a></li>
+              <li><a href="#" class="footer-column__link">Log In</a></li>
+              <li><a href="#" class="footer-column__link">Subscribe</a></li>
+              <li><a href="#" class="footer-column__link">Settings</a></li>
+              <li><a href="#" class="footer-column__link">Last.fm Pro</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3 class="footer-column__title">FOLLOW US</h3>
+            <ul class="footer-column__list">
+              <li><a href="#" class="footer-column__link">Facebook</a></li>
+              <li><a href="#" class="footer-column__link">Twitter</a></li>
+              <li><a href="#" class="footer-column__link">Instagram</a></li>
+              <li><a href="#" class="footer-column__link">YouTube</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-bottom__left">
+            <span class="language-label">English</span>
+            <a href="#" class="language-link">Deutsch</a>
+            <a href="#" class="language-link">Español</a>
+            <a href="#" class="language-link">Français</a>
+            <a href="#" class="language-link">Italiano</a>
+            <a href="#" class="language-link">Polski</a>
+            <a href="#" class="language-link">Português</a>
+            <a href="#" class="language-link">Русский</a>
+            <a href="#" class="language-link">Svenska</a>
+            <a href="#" class="language-link">Türkçe</a>
+            <a href="#" class="language-link">日本語</a>
+          </div>
+          <div class="footer-bottom__right">
+            <span class="time-info">Time zone: <span class="time-zone-value">Europe/Moscow</span></span>
+            <img src="https://www.last.fm/static/images/footer_logo_audioscrobbler.png" alt="Audioscrobbler"
+              class="footer-logo footer-logo--audioscrobbler">
+            <img src="https://www.last.fm/static/images/footer_logo_cbsi.png" alt="CBS Interactive"
+              class="footer-logo footer-logo--cbsi">
+            <p class="copyright">&copy; Last.fm Ltd. 2023</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -33,5 +360,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>
