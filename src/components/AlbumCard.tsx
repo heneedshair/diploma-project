@@ -14,7 +14,6 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ album }) => {
             <img src={imageUrl} alt={album.name} className="album-card__image" />
             <p className="album-card__name">{album.name}</p>
             <p className="album-card__artist">{album.artist}</p>
-            {/* TagsDisplay для альбомов можно добавить здесь, если реализовать fetchAlbumTags */}
         </div>
     );
 };

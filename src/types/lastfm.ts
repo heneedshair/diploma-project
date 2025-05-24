@@ -16,10 +16,10 @@ export interface Artist {
     listeners?: string; // от chart.getTopArtists
     playcount?: string; // от artist.search
     streamable?: string;
-    tags?: Tag[]; // Будем добавлять это поле сами после доп. запроса
+    tags?: Tag[];
 }
 
-export interface ArtistInfo extends Artist { // Для artist.getInfo, которое включает теги
+export interface ArtistInfo extends Artist {
     stats?: {
         listeners: string;
         playcount: string;
@@ -28,7 +28,7 @@ export interface ArtistInfo extends Artist { // Для artist.getInfo, кото�
         summary: string;
         content: string;
     };
-    toptags?: { // artist.getTopTags возвращает toptags.tag
+    toptags?: {
         tag: Tag[];
     };
 }
@@ -45,14 +45,14 @@ export interface Track {
     duration?: string;
     listeners?: string;
     playcount?: string;
-    artist: TrackArtist | string; // chart.getTopTracks дает объект, track.search дает строку
+    artist: TrackArtist | string;
     image: Image[];
     mbid?: string;
     streamable?: {
         '#text': string;
         fulltrack: string;
     };
-    tags?: Tag[]; // Будем добавлять это поле сами
+    tags?: Tag[];
 }
 
 export interface Album {
@@ -61,7 +61,6 @@ export interface Album {
     url: string;
     image: Image[];
     mbid?: string;
-    // Теги для альбомов тоже можно добавить по аналогии, если нужно
 }
 
 // Типы для ответов API
@@ -115,7 +114,7 @@ export interface ArtistTagsResponse {
 export interface TrackTagsResponse {
     toptags: {
         tag: Tag[];
-        '@attr'?: { // Может отсутствовать, если тегов нет
+        '@attr'?: {
             track: string;
             artist: string;
         }

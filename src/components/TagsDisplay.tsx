@@ -4,7 +4,7 @@ import { getArtistTopTags, getTrackTopTags } from '../services/apiService';
 
 interface TagsDisplayProps {
     itemName: string;
-    artistName?: string; // For tracks
+    artistName?: string;
     type: 'artist' | 'track';
 }
 

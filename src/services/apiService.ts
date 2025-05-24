@@ -1,11 +1,10 @@
-// src/services/apiService.ts
 import {
     TopArtistsResponse, ArtistSearchResponse, TopTracksResponse,
     TrackSearchResponse, AlbumSearchResponse, Artist, Track, Album,
     ArtistTagsResponse, TrackTagsResponse, Tag
 } from '../types/lastfm';
 
-const API_KEY = '25b8590eafb0eb154165a4b95c013fc3'; // Ваш API ключ
+const API_KEY = '25b8590eafb0eb154165a4b95c013fc3';
 const BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
 
 const MAX_TAGS_DISPLAYED = 3;
@@ -15,7 +14,7 @@ const POPULAR_TRACKS_LIMIT = 18;
 
 interface FetchParams {
     method: string;
-    [key: string]: string | number; // Allow other string or number params
+    [key: string]: string | number;
 }
 
 async function fetchData<T>(params: FetchParams): Promise<T> {
@@ -23,7 +22,7 @@ async function fetchData<T>(params: FetchParams): Promise<T> {
         ...params,
         api_key: API_KEY,
         format: 'json',
-    } as Record<string, string>); // Ensure all params are strings for URLSearchParams
+    } as Record<string, string>);
 
     const url = `${BASE_URL}?${queryParams}`;
 
@@ -89,7 +88,6 @@ export const getTrackTopTags = async (trackName: string, artistName: string): Pr
     }
 };
 
-// Helper to pick image URL
 export const getImageUrl = (images: any[], size: 'small' | 'medium' | 'large' | 'extralarge' = 'large'): string | undefined => {
     if (!images || !Array.isArray(images)) return undefined;
     const foundImage = images.find(img => img.size === size);

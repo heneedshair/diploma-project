@@ -16,7 +16,6 @@ const ArtistGrid: React.FC<ArtistGridProps> = ({ artists, isLoading, error }) =>
     return (
         <div className="artist-grid">
             {artists.map((artist) => (
-                // Используем artist.mbid или artist.url если имя не уникально, но для Last.fm имя обычно достаточно
                 <ArtistCard key={artist.url || artist.name} artist={artist} />
             ))}
         </div>

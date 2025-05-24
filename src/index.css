@@ -1,16 +1,15 @@
-/* Basic Reset & Global Styles */
 body {
     margin: 0;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Matching Last.fm font stack */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.5;
-    background-color: #f8f8f8; /* Light grey background */
+    background-color: #f8f8f8;
     color: #333;
 }
 
 a {
     text-decoration: none;
-    color: #005580; /* Default link color */
+    color: #005580; /* Фон обычной ссылки */
 }
 
 a:hover {
@@ -31,23 +30,19 @@ ul {
 
 h1, h2, h3, p {
     margin-top: 0;
-    margin-bottom: 0.5em; /* Consistent spacing */
+    margin-bottom: 0.5em;
 }
 
-/* App Container for potential max-width and centering */
 .app-container {
-    max-width: 1200px; /* Adjust as per design, typical for centered layouts */
+    max-width: 1200px;
     margin: 0 auto;
-    background-color: #fff; /* Main content area background */
-    /* box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional shadow for container */
+    background-color: #fff;
 }
 
-
-/* Site Header */
 .site-header {
-    background-color: #d51007; /* Last.fm red */
+    background-color: #d51007;
     color: #fff;
-    padding: 0 20px; /* Horizontal padding */
+    padding: 0 20px;
 }
 
 .header-main {

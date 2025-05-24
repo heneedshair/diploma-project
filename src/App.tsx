@@ -1,10 +1,9 @@
-// src/App.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ArtistGrid from './components/ArtistGrid';
 import TrackGrid from './components/TrackGrid';
-import AlbumGrid from './components/AlbumGrid'; // Создайте по аналогии
+import AlbumGrid from './components/AlbumGrid';
 import { Artist, Track, Album } from './types/lastfm';
 import * as api from './services/apiService';
 
@@ -60,8 +59,6 @@ const App: React.FC = () => {
             setSearchedAlbums([]);
             setSearchedTracks([]);
             setError(prev => ({ ...prev, search: null }));
-            // Можно вернуть отображение популярного контента, если нужно
-            // loadInitialData(); // Или просто скрыть секции поиска
             return;
         }
 

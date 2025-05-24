@@ -1,6 +1,6 @@
 import React from 'react';
-import { Track } from '../types/lastfm'; // Убедитесь, что типы импортированы
-import TrackItem from './TrackItem';     // Компонент для отображения одного трека
+import { Track } from '../types/lastfm';
+import TrackItem from './TrackItem';
 
 interface TrackGridProps {
     tracks: Track[];
@@ -16,7 +16,6 @@ const TrackGrid: React.FC<TrackGridProps> = ({ tracks, isLoading, error }) => {
     return (
         <div className="track-grid">
             {tracks.map((track) => (
-                // Ключ должен быть уникальным. Используем URL или комбинацию, если mbid нет.
                 <TrackItem key={track.url || `${track.name}-${typeof track.artist === 'string' ? track.artist : track.artist.name}`} track={track} />
             ))}
         </div>

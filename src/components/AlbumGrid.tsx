@@ -1,6 +1,6 @@
 import React from 'react';
-import { Album } from '../types/lastfm'; // Убедитесь, что типы импортированы
-import AlbumCard from './AlbumCard';   // Компонент для отображения одного альбома
+import { Album } from '../types/lastfm';
+import AlbumCard from './AlbumCard';
 
 interface AlbumGridProps {
     albums: Album[];
@@ -14,11 +14,8 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ albums, isLoading, error }) => {
     if (!albums || albums.length === 0) return <p>No albums found.</p>;
 
     return (
-        // Используйте класс, который вы определили в CSS для сетки альбомов,
-        // например, "album-grid-search" или "album-grid"
         <div className="album-grid-search">
             {albums.map((album) => (
-                // Ключ должен быть уникальным. Используем URL или комбинацию, если mbid нет.
                 <AlbumCard key={album.url || `${album.name}-${album.artist}`} album={album} />
             ))}
         </div>
