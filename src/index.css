@@ -61,17 +61,23 @@ h1, h2, h3, p {
     flex-shrink: 0;
 }
 
-.logo__img {
-    height: 30px; /* Adjust logo size */
+/* .logo__img {
+    height: 30px;
     width: auto;
     vertical-align: middle;
+} */
+
+.logo-link {
+    text-decoration: none;
+    color: #fff; /* Цвет текста логотипа */
+    font-weight: bold;
+    font-size: 24px; /* Размер текста логотипа */
+    /* Можно добавить другие стили по необходимости */
 }
 
-/* .logo__text {
-    font-size: 24px;
-    font-weight: bold;
-    color: #fff;
-} */
+.logo-text {
+    vertical-align: middle; /* Для выравнивания с другими элементами хедера */
+}
 
 .header-main__center {
     flex-grow: 1;
@@ -146,18 +152,18 @@ h1, h2, h3, p {
     border-bottom: 2px solid #fff; /* Active indicator */
 }
 
-.header-main__right {
+/* .header-main__right {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-}
+} */
 
-.user-profile__img {
+/* .user-profile__img {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    border: 1px solid #fff; /* Optional border */
-}
+    border: 1px solid #fff;
+} */
 
 /* Main Content */
 .main-content {
@@ -348,15 +354,15 @@ h1, h2, h3, p {
 }
 
 
-.footer-logo {
-    height: 16px; /* Adjust as needed */
+/* .footer-logo {
+    height: 16px;
     margin-left: 15px;
     opacity: 0.7;
 }
 .copyright {
     margin-left: 15px;
     color: #888;
-}
+} */
 
 
 /* Responsive adjustments for 1024px if needed */

@@ -1,4 +1,3 @@
-// src/components/SearchBar.tsx
 import React, { useState } from 'react';
 
 interface SearchBarProps {
@@ -29,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 onKeyPress={handleKeyPress}
             />
             <button className="search-bar__button" onClick={handleSearch}>
-                <i className="fas fa-search"></i> {/* Убедитесь, что Font Awesome подключен, если используете иконки */}
+                Go
             </button>
         </div>
     );
