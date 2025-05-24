@@ -1,5 +1,6 @@
 /**
- * @file Script to fetch and display music data from Last.fm API.
+ * @file Script to fetch and display music data from Last.fm API,
+ * including extended search and tags.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,16 +13,31 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     const API_KEY = '25b8590eafb0eb154165a4b95c013fc3'; // <<<--- ВСТАВЬТЕ СЮДА ВАШ API КЛЮЧ!
     const BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
+    const MAX_TAGS_DISPLAYED = 3; // Максимум тегов для отображения под элементом
+    const SEARCH_RESULTS_LIMIT = 6; // Лимит результатов для каждого типа поиска
 
     // ================================
     // DOM ELEMENTS
     // ================================
-    const artistGrid = document.querySelector('.artist-grid');
-    const trackGrid = document.querySelector('.track-grid');
+    const popularArtistsGrid = document.querySelector('.hot-artists .artist-grid');
+    const popularTracksGrid = document.querySelector('.popular-tracks .track-grid');
+
     const searchInput = document.querySelector('.search-bar__input');
     const searchButton = document.querySelector('.search-bar__button');
-    const popularTracksTitle = document.querySelector('.popular-tracks .section-title');
-    const hotArtistsTitle = document.querySelector('.hot-artists .section-title');
+
+    const popularContentSections = document.querySelectorAll('.popular-content');
+    const searchResultsSections = document.querySelectorAll('.search-results-section');
+
+    const searchArtistsGrid = document.querySelector('.search-results-artists .artist-grid-search');
+    const searchAlbumsGrid = document.querySelector('.search-results-albums .album-grid-search');
+    const searchTracksGrid = document.querySelector('.search-results-tracks .track-grid-search');
+
+    const searchArtistsTitle = document.querySelector('.search-results-title-artists');
+    const searchAlbumsTitle = document.querySelector('.search-results-title-albums');
+    const searchTracksTitle = document.querySelector('.search-results-title-tracks');
+
+    const pageTitle = document.querySelector('.page-title');
+
 
     // ================================
     // UTILITY FUNCTIONS
@@ -30,29 +46,26 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Displays an error message to the user.
      * @param {string} message - The error message to display.
-     * @param {HTMLElement} sectionElement - The HTML element related to the error (e.g., artistGrid or trackGrid).
+     * @param {HTMLElement} [sectionElement=null] - The HTML element related to the error. If null, uses a general error display.
      */
-    function displayError(message, sectionElement) {
-        if (sectionElement) {
-            sectionElement.innerHTML = `<p class="error-message" style="color: red; text-align: center;">${message}</p>`;
+    function displayError(message, sectionElement = null) {
+        console.error('Displaying error:', message);
+        if (sectionElement && typeof sectionElement.D === 'function') { // Check if sectionElement is a grid that can be cleared
+            sectionElement.innerHTML = `<p class="error-message">${message}</p>`;
         } else {
-            // Fallback if no specific section is provided, e.g., for global errors
-            const mainContent = document.querySelector('.main-content');
-            let errorContainer = mainContent.querySelector('.global-error-message');
-            if (!errorContainer) {
-                errorContainer = document.createElement('div');
-                errorContainer.className = 'global-error-message';
-                errorContainer.style.color = 'red';
-                errorContainer.style.backgroundColor = '#ffebee';
-                errorContainer.style.border = '1px solid red';
-                errorContainer.style.padding = '10px';
-                errorContainer.style.marginBottom = '15px';
-                errorContainer.style.textAlign = 'center';
-                mainContent.insertBefore(errorContainer, mainContent.firstChild);
-            }
+            // Fallback for general errors or when sectionElement is not a grid
+            const errorContainer = document.createElement('div');
+            errorContainer.className = 'error-message global-error-message';
             errorContainer.textContent = message;
+            errorContainer.style.marginBottom = '15px';
+
+            const mainContent = document.querySelector('.main-content');
+            const existingGlobalError = mainContent.querySelector('.global-error-message');
+            if (existingGlobalError) {
+                existingGlobalError.remove();
+            }
+            mainContent.insertBefore(errorContainer, pageTitle.nextSibling); // Insert after page title
         }
-        console.error(message); // Log error to console as well
     }
 
     /**
@@ -68,58 +81,106 @@ document.addEventListener('DOMContentLoaded', () => {
             api_key: API_KEY,
             format: 'json',
         });
-
         const url = `${BASE_URL}?${queryParams}`;
-
         try {
             const response = await fetch(url);
             if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.statusText} (status: ${response.status})`);
+                throw new Error(`Network Error: ${response.status} ${response.statusText}`);
             }
             const data = await response.json();
             if (data.error) {
-                throw new Error(`Last.fm API error ${data.error}: ${data.message}`);
+                throw new Error(`Last.fm API Error ${data.error}: ${data.message}`);
             }
             return data;
         } catch (error) {
-            console.error('Fetch data error:', error);
-            throw error; // Re-throw to be caught by calling function
+            console.error(`Workspace data error for params ${JSON.stringify(params)}:`, error);
+            throw error;
         }
+    }
+
+    /**
+     * Clears content of specified grid elements.
+     * @param {Array<HTMLElement>} grids - Array of grid elements to clear.
+     */
+    function clearGrids(grids) {
+        grids.forEach(grid => {
+            if (grid) grid.innerHTML = '';
+        });
+    }
+
+    // ================================
+    // TAGS FUNCTIONS
+    // ================================
+
+    /**
+     * Fetches top tags for an artist.
+     * @async
+     * @param {string} artistName - The name of the artist.
+     * @returns {Promise<Array<object>>} A list of tag objects.
+     */
+    async function fetchArtistTags(artistName) {
+        try {
+            const data = await fetchData({ method: 'artist.getTopTags', artist: artistName });
+            return data.toptags.tag || [];
+        } catch (error) {
+            console.warn(`Could not fetch tags for artist ${artistName}: ${error.message}`);
+            return []; // Return empty array on error
+        }
+    }
+
+    /**
+     * Fetches top tags for a track.
+     * @async
+     * @param {string} trackName - The name of the track.
+     * @param {string} artistName - The name of the artist.
+     * @returns {Promise<Array<object>>} A list of tag objects.
+     */
+    async function fetchTrackTags(trackName, artistName) {
+        try {
+            const data = await fetchData({ method: 'track.getTopTags', track: trackName, artist: artistName });
+            return data.toptags.tag || [];
+        } catch (error) {
+            console.warn(`Could not fetch tags for track ${trackName} by ${artistName}: ${error.message}`);
+            return [];
+        }
+    }
+
+    /**
+     * Creates and appends a tags container to a DOM element.
+     * @param {HTMLElement} parentElement - The element to append tags to.
+     * @param {Array<object>} tags - Array of tag objects from API.
+     */
+    function displayTags(parentElement, tags) {
+        if (!tags || tags.length === 0) return;
+
+        const tagsContainer = document.createElement('div');
+        tagsContainer.className = 'tags-container';
+
+        tags.slice(0, MAX_TAGS_DISPLAYED).forEach(tag => {
+            const tagElement = document.createElement('a');
+            tagElement.className = 'tag';
+            tagElement.href = tag.url || '#'; // Link to Last.fm tag page or fallback
+            tagElement.textContent = tag.name;
+            tagElement.target = '_blank'; // Open in new tab
+            tagsContainer.appendChild(tagElement);
+        });
+        parentElement.appendChild(tagsContainer);
     }
 
     // ================================
     // ARTIST FUNCTIONS
     // ================================
-
     /**
-     * Fetches top artists from Last.fm.
-     * @async
-     * @returns {Promise<Array<object>>} A list of top artist objects.
-     */
-    async function fetchTopArtists() {
-        try {
-            const data = await fetchData({ method: 'chart.getTopArtists', limit: 12 });
-            return data.artists.artist;
-        } catch (error) {
-            displayError('Не удалось загрузить популярных исполнителей. Попробуйте обновить страницу.', artistGrid);
-            return []; // Return empty array on error to prevent further issues
-        }
-    }
-
-    /**
-     * Displays artists in the grid.
+     * Displays artists in the specified grid.
      * @param {Array<object>} artists - Array of artist objects.
+     * @param {HTMLElement} gridElement - The grid element to display artists in.
      */
-    function displayArtists(artists) {
-        if (!artistGrid) return;
-        artistGrid.innerHTML = ''; // Clear existing content or placeholders
+    function renderArtists(artists, gridElement) {
+        if (!gridElement) return;
+        gridElement.innerHTML = '';
 
         if (!artists || artists.length === 0) {
-            // displayError could have been called already by fetchTopArtists
-            // This is a fallback or for cases where artists array is empty for other reasons
-            if (!artistGrid.querySelector('.error-message')) {
-                artistGrid.innerHTML = '<p style="text-align: center;">Исполнители не найдены.</p>';
-            }
+            gridElement.innerHTML = '<p>Исполнители не найдены.</p>';
             return;
         }
 
@@ -127,55 +188,85 @@ document.addEventListener('DOMContentLoaded', () => {
             const artistCard = document.createElement('div');
             artistCard.className = 'artist-card';
 
-            // Last.fm API provides images in different sizes. We pick 'extralarge'.
-            // Image URL: artist.image is an array of objects, each with #text (url) and size.
             const imageUrl = artist.image.find(img => img.size === 'extralarge')?.['#text'] ||
                 artist.image.find(img => img.size === 'large')?.['#text'] ||
                 `https://via.placeholder.com/130/DDDDDD/808080?text=${encodeURIComponent(artist.name)}`;
 
-
-            artistCard.innerHTML = `
+            const artistCardContent = document.createElement('div'); // Wrapper for content before tags
+            artistCardContent.innerHTML = `
         <img src="${imageUrl}" alt="${artist.name}" class="artist-card__image">
         <p class="artist-card__name">${artist.name}</p>
       `;
-            artistGrid.appendChild(artistCard);
+            artistCard.appendChild(artistCardContent);
+            gridElement.appendChild(artistCard);
+
+            // Asynchronously fetch and display tags
+            fetchArtistTags(artist.name).then(tags => {
+                displayTags(artistCardContent, tags); // Append tags inside content div
+            }).catch(err => console.warn(`Failed to load tags for ${artist.name}`, err));
+        });
+    }
+
+    async function fetchTopArtists() {
+        try {
+            const data = await fetchData({ method: 'chart.getTopArtists', limit: 12 });
+            return data.artists.artist;
+        } catch (error) {
+            displayError('Не удалось загрузить популярных исполнителей.', popularArtistsGrid);
+            return [];
+        }
+    }
+
+    // ================================
+    // ALBUM FUNCTIONS
+    // ================================
+    /**
+     * Displays albums in the specified grid.
+     * @param {Array<object>} albums - Array of album objects.
+     * @param {HTMLElement} gridElement - The grid element to display albums in.
+     */
+    function renderAlbums(albums, gridElement) {
+        if (!gridElement) return;
+        gridElement.innerHTML = '';
+
+        if (!albums || albums.length === 0) {
+            gridElement.innerHTML = '<p>Альбомы не найдены.</p>';
+            return;
+        }
+
+        albums.forEach(album => {
+            const albumCard = document.createElement('div');
+            albumCard.className = 'album-card';
+
+            const imageUrl = album.image.find(img => img.size === 'extralarge')?.['#text'] ||
+                album.image.find(img => img.size === 'large')?.['#text'] ||
+                `https://via.placeholder.com/150/DDDDDD/808080?text=${encodeURIComponent(album.name)}`;
+
+            albumCard.innerHTML = `
+        <img src="${imageUrl}" alt="${album.name}" class="album-card__image">
+        <p class="album-card__name">${album.name}</p>
+        <p class="album-card__artist">${album.artist}</p>
+      `;
+            // Note: Tags for albums are not explicitly requested here but could be added similarly
+            // using album.getTopTags (requires artist and album name) if desired.
+            gridElement.appendChild(albumCard);
         });
     }
 
     // ================================
     // TRACK FUNCTIONS
     // ================================
-
     /**
-     * Fetches top tracks from Last.fm.
-     * @async
-     * @returns {Promise<Array<object>>} A list of top track objects.
-     */
-    async function fetchTopTracks() {
-        try {
-            const data = await fetchData({ method: 'chart.getTopTracks', limit: 18 });
-            return data.tracks.track;
-        } catch (error) {
-            displayError('Не удалось загрузить популярные треки. Попробуйте обновить страницу.', trackGrid);
-            return [];
-        }
-    }
-
-    /**
-     * Displays tracks in the grid.
+     * Displays tracks in the specified grid.
      * @param {Array<object>} tracks - Array of track objects.
-     * @param {string} [title="Popular tracks"] - The title for the tracks section.
+     * @param {HTMLElement} gridElement - The grid element to display tracks in.
      */
-    function displayTracks(tracks, title = "Popular tracks") {
-        if (!trackGrid || !popularTracksTitle) return;
-
-        popularTracksTitle.textContent = title;
-        trackGrid.innerHTML = ''; // Clear existing content or placeholders
+    function renderTracks(tracks, gridElement) {
+        if (!gridElement) return;
+        gridElement.innerHTML = '';
 
         if (!tracks || tracks.length === 0) {
-            if (!trackGrid.querySelector('.error-message')) {
-                trackGrid.innerHTML = '<p style="text-align: center;">Треки не найдены.</p>';
-            }
+            gridElement.innerHTML = '<p>Треки не найдены.</p>';
             return;
         }
 
@@ -183,46 +274,69 @@ document.addEventListener('DOMContentLoaded', () => {
             const trackItem = document.createElement('div');
             trackItem.className = 'track-item';
 
-            // Image URL: track.image is an array. We pick 'medium' or 'large'.
-            const imageUrl = track.image.find(img => img.size === 'medium')?.['#text'] ||
-                track.image.find(img => img.size === 'large')?.['#text'] ||
-                track.image.find(img => img.size !== '')?.['#text'] || // any available image
+            const imageUrl = track.image?.find(img => img.size === 'medium')?.['#text'] ||
+                track.image?.find(img => img.size === 'large')?.['#text'] ||
+                track.image?.find(img => img.size !== '')?.['#text'] ||
                 `https://via.placeholder.com/64/EEEEEE/808080?text=Art`;
 
-            trackItem.innerHTML = `
-        <img src="${imageUrl}" alt="${track.name}" class="track-item__album-art">
-        <div class="track-item__info">
-          <p class="track-item__title">${track.name}</p>
-          <p class="track-item__artist">${track.artist.name || track.artist}</p> </div>
+            const trackInfo = document.createElement('div');
+            trackInfo.className = 'track-item__info';
+            trackInfo.innerHTML = `
+        <p class="track-item__title">${track.name}</p>
+        <p class="track-item__artist">${typeof track.artist === 'string' ? track.artist : track.artist.name}</p>
       `;
-            trackGrid.appendChild(trackItem);
+
+            trackItem.innerHTML = `<img src="${imageUrl}" alt="${track.name}" class="track-item__album-art">`;
+            trackItem.appendChild(trackInfo);
+            gridElement.appendChild(trackItem);
+
+            // Asynchronously fetch and display tags
+            const artistNameForTags = typeof track.artist === 'string' ? track.artist : track.artist.name;
+            fetchTrackTags(track.name, artistNameForTags).then(tags => {
+                displayTags(trackInfo, tags);
+            }).catch(err => console.warn(`Failed to load tags for ${track.name}`, err));
         });
+    }
+
+    async function fetchTopTracks() {
+        try {
+            const data = await fetchData({ method: 'chart.getTopTracks', limit: 18 });
+            return data.tracks.track;
+        } catch (error) {
+            displayError('Не удалось загрузить популярные треки.', popularTracksGrid);
+            return [];
+        }
     }
 
     // ================================
     // SEARCH FUNCTIONS
     // ================================
-
-    /**
-     * Searches for tracks on Last.fm.
-     * @async
-     * @param {string} query - The search query.
-     * @returns {Promise<Array<object>>} A list of track objects from search results.
-     */
-    async function searchTracks(query) {
-        if (!query.trim()) {
-            displayError('Пожалуйста, введите поисковый запрос.', trackGrid);
+    async function searchArtists(query) {
+        try {
+            const data = await fetchData({ method: 'artist.search', artist: query, limit: SEARCH_RESULTS_LIMIT });
+            return data.results.artistmatches.artist || [];
+        } catch (error) {
+            displayError(`Ошибка при поиске исполнителей: ${error.message}`, searchArtistsGrid);
             return [];
         }
-        try {
-            // Clear previous global errors if any
-            const globalError = document.querySelector('.global-error-message');
-            if (globalError) globalError.remove();
+    }
 
-            const data = await fetchData({ method: 'track.search', track: query, limit: 18 });
-            return data.results.trackmatches.track;
+    async function searchAlbums(query) {
+        try {
+            const data = await fetchData({ method: 'album.search', album: query, limit: SEARCH_RESULTS_LIMIT });
+            return data.results.albummatches.album || [];
         } catch (error) {
-            displayError(`Ошибка при поиске треков "${query}". Попробуйте еще раз или измените запрос. (${error.message})`, trackGrid);
+            displayError(`Ошибка при поиске альбомов: ${error.message}`, searchAlbumsGrid);
+            return [];
+        }
+    }
+
+    async function searchTracks(query) {
+        try {
+            const data = await fetchData({ method: 'track.search', track: query, limit: SEARCH_RESULTS_LIMIT });
+            return data.results.trackmatches.track || [];
+        } catch (error) {
+            displayError(`Ошибка при поиске треков: ${error.message}`, searchTracksGrid);
             return [];
         }
     }
@@ -232,64 +346,88 @@ document.addEventListener('DOMContentLoaded', () => {
      * @async
      */
     async function handleSearch() {
-        const query = searchInput.value;
-        if (!query.trim()) {
-            // If search is empty, reload popular tracks
-            loadPopularTracks();
+        const query = searchInput.value.trim();
+
+        // Clear previous global errors
+        const globalError = document.querySelector('.global-error-message');
+        if (globalError) globalError.remove();
+
+        if (!query) {
+            // If search is empty, show popular content and hide search results
+            popularContentSections.forEach(s => s.style.display = '');
+            searchResultsSections.forEach(s => s.style.display = 'none');
+            loadInitialData(); // Reload popular data
             return;
         }
-        hotArtistsTitle.textContent = `Результаты поиска по исполнителям для "${query}" (API не поддерживает поиск по исполнителям в этой демо-версии)`;
-        if (artistGrid) artistGrid.innerHTML = '<p style="text-align:center;">Функция поиска по исполнителям не реализована в этой версии. Показаны результаты по трекам ниже.</p>';
 
-        const tracks = await searchTracks(query);
-        displayTracks(tracks, `Результаты поиска по трекам для "${query}"`);
+        // Hide popular content, show search sections
+        popularContentSections.forEach(s => s.style.display = 'none');
+        searchResultsSections.forEach(s => s.style.display = '');
+
+        clearGrids([searchArtistsGrid, searchAlbumsGrid, searchTracksGrid]); // Clear previous search results
+
+        searchArtistsTitle.textContent = `Исполнители по запросу "${query}"`;
+        searchAlbumsTitle.textContent = `Альбомы по запросу "${query}"`;
+        searchTracksTitle.textContent = `Треки по запросу "${query}"`;
+
+        // Show loading state (optional, could be spinners)
+        if (searchArtistsGrid) searchArtistsGrid.innerHTML = "<p>Поиск исполнителей...</p>";
+        if (searchAlbumsGrid) searchAlbumsGrid.innerHTML = "<p>Поиск альбомов...</p>";
+        if (searchTracksGrid) searchTracksGrid.innerHTML = "<p>Поиск треков...</p>";
+
+        try {
+            const [artists, albums, tracks] = await Promise.all([
+                searchArtists(query),
+                searchAlbums(query),
+                searchTracks(query)
+            ]);
+
+            renderArtists(artists, searchArtistsGrid);
+            renderAlbums(albums, searchAlbumsGrid);
+            renderTracks(tracks, searchTracksGrid);
+
+        } catch (error) {
+            // This catch might be redundant if individual search functions handle their errors display
+            // but can catch errors from Promise.all itself or unhandled rejections.
+            displayError('Произошла ошибка во время поиска. Пожалуйста, попробуйте еще раз.', null); // General error
+            console.error("Search operation failed:", error);
+        }
     }
-
 
     // ================================
     // INITIALIZATION
     // ================================
-
-    /**
-     * Loads popular artists onto the page.
-     * @async
-     */
-    async function loadPopularArtists() {
+    async function loadInitialData() {
         if (API_KEY === 'YOUR_API_KEY') {
-            displayError('Пожалуйста, укажите ваш API ключ в файле api.js для загрузки исполнителей.', artistGrid);
+            displayError('КРИТИЧЕСКАЯ ОШИБКА: API ключ не настроен. Пожалуйста, укажите ваш API_KEY в файле api.js.', null);
             return;
         }
-        const artists = await fetchTopArtists();
-        displayArtists(artists);
+        // Clear previous content before loading
+        clearGrids([popularArtistsGrid, popularTracksGrid]);
+
+        // Show loading state (optional)
+        if (popularArtistsGrid) popularArtistsGrid.innerHTML = "<p>Загрузка популярных исполнителей...</p>";
+        if (popularTracksGrid) popularTracksGrid.innerHTML = "<p>Загрузка популярных треков...</p>";
+
+
+        const [artists, tracks] = await Promise.all([
+            fetchTopArtists(),
+            fetchTopTracks()
+        ]);
+        renderArtists(artists, popularArtistsGrid);
+        renderTracks(tracks, popularTracksGrid);
     }
 
-    /**
-     * Loads popular tracks onto the page.
-     * @async
-     */
-    async function loadPopularTracks() {
-        if (API_KEY === 'YOUR_API_KEY') {
-            displayError('Пожалуйста, укажите ваш API ключ в файле api.js для загрузки треков.', trackGrid);
-            return;
-        }
-        const tracks = await fetchTopTracks();
-        displayTracks(tracks, "Popular tracks");
-    }
-
-    /**
-     * Initializes the application.
-     */
     function init() {
         if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
-            displayError('КРИТИЧЕСКАЯ ОШИБКА: API ключ не настроен. Пожалуйста, укажите ваш API_KEY в файле api.js.', document.querySelector('.main-content'));
-            // Disable search if API key is missing
+            displayError('КРИТИЧЕСКАЯ ОШИБКА: API ключ не настроен. Пожалуйста, укажите ваш API_KEY в файле api.js.', null);
             if (searchButton) searchButton.disabled = true;
             if (searchInput) searchInput.disabled = true;
+            searchInput.placeholder = "API ключ не настроен";
             return;
         }
 
-        loadPopularArtists();
-        loadPopularTracks();
+        loadInitialData();
 
         if (searchButton && searchInput) {
             searchButton.addEventListener('click', handleSearch);

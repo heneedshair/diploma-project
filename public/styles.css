@@ -385,3 +385,92 @@ h1, h2, h3, p {
     }
 }
 */
+
+/* Стили для тегов */
+
+.tags-container {
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 1.4; /* Для лучшего отображения нескольких строк тегов */
+}
+
+.tag {
+    display: inline-block;
+    background-color: #efefef; /* Светло-серый фон */
+    color: #333; /* Темный текст */
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 4px;
+    margin-bottom: 4px; /* Отступ снизу для тегов, если они переносятся */
+    text-decoration: none;
+    /* text-transform: lowercase; */ /* Теги на Last.fm часто в нижнем регистре */
+}
+
+.tag:hover {
+    background-color: #ddd; /* Более темный фон при наведении */
+    text-decoration: none;
+    color: #000;
+}
+
+/* Стили для сетки альбомов (аналогично сетке артистов, но можно настроить) */
+.album-grid-search {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Адаптивная сетка */
+    gap: 20px;
+}
+
+.album-card {
+    text-align: center;
+    background-color: #fff;
+    /* padding: 10px; */ /* Убрал, т.к. отступы лучше через flex/grid или margin у дочерних */
+    /* border: 1px solid #e9e9e9; */ /* Можно добавить рамку, если нужно */
+    /* border-radius: 3px; */
+}
+
+.album-card__image {
+    width: 100%; /* Занимает всю ширину карточки */
+    max-width: 150px; /* Максимальная ширина изображения */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+    aspect-ratio: 1 / 1; /* Делает изображение квадратным */
+    object-fit: cover; /* Масштабирует изображение для заполнения контейнера */
+    margin: 0 auto 10px auto;
+    border: 1px solid #eee; /* Тонкая рамка вокруг изображения */
+    display: block;
+}
+
+.album-card__name {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-card__artist {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Стили для секций результатов поиска */
+.search-results-section {
+    /* Можно добавить общие стили для всех секций результатов поиска */
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    padding: 10px;
+    background-color: #ffeeee;
+    border: 1px solid #ffcccc;
+    border-radius: 3px;
+}
+
+/* Скрытие элементов */
+.hidden {
+    display: none !important;
+}
